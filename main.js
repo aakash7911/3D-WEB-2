@@ -813,16 +813,30 @@ function initScriptureReader() {
       tabs.forEach(t => t.classList.remove("active"));
       tab.classList.add("active");
 
-      card.classList.add("flip-page");
-
-      setTimeout(() => {
-        shlokSanskrit.innerHTML = data.sanskrit;
-        shlokHindi.innerText = data.hindi;
-        shlokEnglish.innerText = data.english;
-        shlokRef.innerText = data.ref;
+      if (typeof gsap !== 'undefined') {
+        gsap.to(card, { opacity: 0, scale: 0.98, y: 8, duration: 0.2, ease: "power2.in", onComplete: () => {
+          shlokSanskrit.innerHTML = data.sanskrit;
+          shlokHindi.innerText = data.hindi;
+          shlokEnglish.innerText = data.english;
+          shlokRef.innerText = data.ref;
+          
+          gsap.to(card, { opacity: 1, scale: 1, y: 0, duration: 0.35, ease: "power2.out" });
+        }});
+      } else {
+        card.style.opacity = "0";
+        card.style.transform = "scale(0.98) translateY(8px)";
+        card.style.transition = "opacity 0.2s ease, transform 0.2s ease";
         
-        card.classList.remove("flip-page");
-      }, 300);
+        setTimeout(() => {
+          shlokSanskrit.innerHTML = data.sanskrit;
+          shlokHindi.innerText = data.hindi;
+          shlokEnglish.innerText = data.english;
+          shlokRef.innerText = data.ref;
+          
+          card.style.opacity = "1";
+          card.style.transform = "scale(1) translateY(0)";
+        }, 200);
+      }
     });
   });
 }

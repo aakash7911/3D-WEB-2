@@ -920,8 +920,8 @@ h1, h2, h3, h4 {
   background-size: cover;
   background-position: center;
   z-index: 1;
-  opacity: 0.15; /* Barely visible background to give paper texture */
-  filter: grayscale(1) brightness(0.3);
+  opacity: 0.45; /* Much more visible */
+  filter: contrast(1.15) brightness(0.55);
 }
 
 .content-wrapper-scriptures {
