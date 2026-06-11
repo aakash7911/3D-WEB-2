@@ -1,0 +1,1253 @@
+/* ==========================================
+   DESIGN SYSTEM & CUSTOM VARIABLE TOKENS
+   ========================================== */
+:root {
+  --bg-dark: #09090e;
+  --bg-card: rgba(18, 18, 28, 0.55);
+  --bg-card-hover: rgba(26, 26, 38, 0.7);
+  --saffron: #ff6c00;
+  --saffron-glow: rgba(255, 108, 0, 0.4);
+  --gold: #d4af37;
+  --gold-glow: rgba(212, 175, 55, 0.4);
+  --gold-light: #f6e6b4;
+  --text-main: #f8f9fa;
+  --text-muted: #abb2bf;
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-hindi: 'Mukta', sans-serif;
+  --border-glass: 1px solid rgba(255, 255, 255, 0.07);
+  --border-gold: 1px solid rgba(212, 175, 55, 0.25);
+  --shadow-premium: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 15px rgba(212, 175, 55, 0.1);
+  --transition-smooth: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ==========================================
+   BASIC RESET & COMMON STYLES
+   ========================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+html, body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  letter-spacing: 1px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--saffron);
+}
+
+/* Glassmorphism Common Class */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: var(--border-glass);
+  border-radius: 12px;
+}
+
+.text-center { text-align: center; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.hidden { display: none !important; }
+
+/* ==========================================
+   PRELOADER
+   ========================================== */
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-dark);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.preloader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.preloader-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.divine-symbol {
+  font-family: var(--font-hindi);
+  font-size: 80px;
+  color: var(--saffron);
+  text-shadow: 0 0 30px var(--saffron-glow);
+  animation: pulseSymbol 2.5s infinite ease-in-out;
+  margin-bottom: 20px;
+}
+
+.preloader-bar {
+  width: 240px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.preloader-progress {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--saffron), var(--gold));
+  box-shadow: 0 0 8px var(--gold-glow);
+  transition: width 0.3s ease;
+}
+
+.preloader-text {
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+@keyframes pulseSymbol {
+  0%, 100% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+    text-shadow: 0 0 45px var(--saffron-glow), 0 0 10px var(--gold);
+  }
+}
+
+/* ==========================================
+   NAVIGATION
+   ========================================== */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 24px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  background: linear-gradient(to bottom, rgba(9, 9, 14, 0.9) 0%, rgba(9, 9, 14, 0) 100%);
+  pointer-events: none;
+}
+
+.logo-container {
+  pointer-events: auto;
+}
+
+.header-logo {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 24px;
+  letter-spacing: 4px;
+  background: linear-gradient(135deg, var(--saffron) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.desktop-nav {
+  display: flex;
+  gap: 32px;
+  pointer-events: auto;
+}
+
+.nav-link {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: var(--transition-smooth);
+  position: relative;
+  padding: 6px 0;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--saffron), var(--gold));
+  transition: var(--transition-smooth);
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--gold-light);
+  text-shadow: 0 0 8px var(--gold-glow);
+}
+
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Floating Navigation Dots */
+.floating-nav-dots {
+  position: fixed;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  z-index: 1000;
+}
+
+.dot-wrapper {
+  position: relative;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: var(--transition-smooth);
+}
+
+.dot-wrapper:hover .nav-dot, .dot-wrapper.active .nav-dot {
+  background: var(--gold);
+  box-shadow: 0 0 10px var(--gold-glow), 0 0 2px var(--gold);
+  transform: scale(1.4);
+}
+
+.dot-wrapper.active .nav-dot {
+  background: var(--saffron);
+  box-shadow: 0 0 12px var(--saffron-glow);
+}
+
+.dot-tooltip {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(8px);
+  border: var(--border-glass);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-main);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  pointer-events: none;
+}
+
+.dot-wrapper:hover .dot-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* ==========================================
+   SCROLL WRAPPER
+   ========================================== */
+.scroll-container {
+  width: 100vw;
+  overflow: visible;
+}
+
+.scroll-section {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-bg-dim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(9, 9, 14, 0.4) 0%, rgba(9, 9, 14, 0.92) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Badge styling across sections */
+.section-badge {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--saffron);
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: inline-block;
+  position: relative;
+  text-shadow: 0 0 6px var(--saffron-glow);
+}
+
+.section-badge::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.section-title {
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.section-desc {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+
+/* ==========================================
+   SECTION 1: INTRO SEQUENCE
+   ========================================== */
+#intro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.motion-player-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.frame-sequence-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.motion-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none; /* Instant frame swaps with no cross-fade */
+}
+
+.motion-frame.active {
+  display: block;
+}
+
+.intro-overlay-content {
+  z-index: 3;
+  text-align: center;
+  max-width: 700px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.spirit-sub {
+  font-family: var(--font-hindi);
+  font-size: 20px;
+  letter-spacing: 6px;
+  color: var(--gold);
+  text-shadow: 0 0 10px var(--gold-glow);
+  margin-bottom: 12px;
+}
+
+.spirit-title {
+  font-size: 78px;
+  font-weight: 900;
+  background: linear-gradient(to bottom, #ffffff 30%, #e1e3e6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.7));
+  margin-bottom: 20px;
+}
+
+.spirit-desc {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  margin-bottom: 40px;
+}
+
+/* Scroll Indicator Mouse */
+.scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.scroll-mouse {
+  width: 22px;
+  height: 38px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  position: relative;
+  display: block;
+}
+
+.scroll-mouse .wheel {
+  width: 3px;
+  height: 7px;
+  background: var(--gold);
+  border-radius: 2px;
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: scrollWheel 1.8s infinite ease-in-out;
+}
+
+.scroll-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+}
+
+@keyframes scrollWheel {
+  0% {
+    top: 6px;
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  90% {
+    top: 18px;
+    opacity: 0;
+  }
+  100% {
+    top: 6px;
+    opacity: 0;
+  }
+}
+
+/* ==========================================
+   SECTION 2: 3D TEMPLE
+   ========================================== */
+.grid-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(212, 175, 55, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 175, 55, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  padding: 0 10%;
+  display: grid;
+  grid-template-columns: 45% 55%;
+  align-items: center;
+  gap: 5%;
+}
+
+.text-side {
+  max-width: 480px;
+}
+
+.interactive-instruction {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 40px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: var(--border-glass);
+  font-size: 12px;
+  color: var(--gold-light);
+  line-height: 1.5;
+}
+
+.tilt-icon {
+  color: var(--saffron);
+  animation: tiltShake 3s infinite ease-in-out;
+}
+
+@keyframes tiltShake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+}
+
+.card-side {
+  display: flex;
+  justify-content: center;
+  perspective: 1500px; /* Essential for 3D depth */
+}
+
+/* Parallax Card Layout */
+.parallax-card-container {
+  width: 420px;
+  height: 480px;
+  cursor: pointer;
+}
+
+.parallax-card {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  position: relative;
+  transform-style: preserve-3d;
+  background: #0f0f14;
+  border: var(--border-gold);
+  box-shadow: var(--shadow-premium);
+  overflow: hidden;
+  transition: transform 0.1s ease-out; /* Smooth follow cursor */
+}
+
+.card-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+}
+
+.card-layer.background {
+  transform: translateZ(-30px) scale(1.15); /* Pushed deep into card */
+  transition: transform 0.1s ease-out;
+  background-repeat: no-repeat;
+}
+
+.card-layer.gloss {
+  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.15) 100%);
+  transform: translateZ(50px);
+  z-index: 2;
+}
+
+.card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 30px;
+  background: linear-gradient(to top, rgba(9, 9, 14, 0.95) 0%, rgba(9, 9, 14, 0.6) 60%, rgba(9, 9, 14, 0) 100%);
+  transform: translateZ(40px); /* Lift text above image background */
+  z-index: 3;
+}
+
+.card-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--saffron);
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.card-info h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.card-info p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+/* ==========================================
+   SECTION 3: ARCHITECTURE (HOTSPOTS)
+   ========================================== */
+.showcase-container {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  padding-left: 6%;
+  display: grid;
+  grid-template-columns: 28% 72%;
+  align-items: center;
+}
+
+.details-sidebar {
+  padding-right: 30px;
+  max-width: 320px;
+}
+
+.info-drawer {
+  margin-top: 30px;
+  min-height: 250px;
+  padding: 24px;
+  border-radius: 12px;
+  background: rgba(18, 18, 28, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--border-glass);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  transition: var(--transition-smooth);
+}
+
+.info-drawer.active {
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  background: rgba(22, 22, 34, 0.65);
+}
+
+.drawer-placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--text-muted);
+  gap: 16px;
+}
+
+.drawer-placeholder p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.drawer-content {
+  animation: drawerFadeIn 0.5s ease-out;
+}
+
+.drawer-content h4 {
+  font-size: 20px;
+  color: var(--gold);
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.drawer-content p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+
+.drawer-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spec-item {
+  font-size: 11px;
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 6px 12px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.spec-item strong {
+  color: var(--gold-light);
+  font-weight: 500;
+}
+
+@keyframes drawerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.interactive-image-pane {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: radial-gradient(circle at center, rgba(16, 16, 26, 0.4) 0%, rgba(9, 9, 14, 0.95) 100%);
+}
+
+.image-wrapper-hotspots {
+  position: relative;
+  width: 90%;
+  max-width: 960px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  border: var(--border-glass);
+}
+
+.full-temple-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.85;
+  filter: brightness(0.85) contrast(1.05);
+}
+
+/* Hotspot Markers Styling */
+.hotspot-marker {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 10;
+}
+
+.hotspot-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold);
+  animation: hotspotRipple 1.8s infinite ease-out;
+  pointer-events: none;
+}
+
+.hotspot-dot {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--gold);
+  box-shadow: 0 0 8px var(--gold-glow);
+  transition: transform 0.3s ease;
+}
+
+.hotspot-marker:hover .hotspot-dot, .hotspot-marker.active .hotspot-dot {
+  transform: scale(1.3);
+  background-color: var(--saffron);
+  box-shadow: 0 0 12px var(--saffron-glow);
+}
+
+.hotspot-marker.active .hotspot-ring {
+  border-color: var(--saffron);
+}
+
+.hotspot-label {
+  position: absolute;
+  top: 50%;
+  left: 32px;
+  transform: translateY(-50%) translateX(10px);
+  background: rgba(9, 9, 14, 0.88);
+  backdrop-filter: blur(8px);
+  border: var(--border-gold);
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: var(--text-main);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  pointer-events: none;
+}
+
+.hotspot-marker:hover .hotspot-label, .hotspot-marker.active .hotspot-label {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+@keyframes hotspotRipple {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* ==========================================
+   SECTION 4: SARYU GHAT CANVAS
+   ========================================== */
+.ghat-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  opacity: 0.65;
+  filter: brightness(0.6) contrast(1.1);
+}
+
+.diya-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: auto; /* Allow mouse interaction */
+}
+
+.ghat-text-overlay {
+  position: absolute;
+  left: 8%;
+  bottom: 12%;
+  max-width: 600px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.ghat-title {
+  font-size: 44px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, #fff 0%, var(--gold-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.ghat-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  font-weight: 300;
+  margin-bottom: 24px;
+}
+
+.interactive-glow-hint {
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-shadow: 0 0 8px var(--gold-glow);
+  animation: textPulse 2s infinite ease-in-out;
+}
+
+@keyframes textPulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* ==========================================
+   SECTION 5: HOLY SCRIPTURES
+   ========================================== */
+.scripture-visual-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  opacity: 0.15; /* Barely visible background to give paper texture */
+  filter: grayscale(1) brightness(0.3);
+}
+
+.content-wrapper-scriptures {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10%;
+}
+
+.scripture-header {
+  margin-bottom: 50px;
+  max-width: 600px;
+}
+
+.scripture-main-title {
+  font-size: 38px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.scripture-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.scripture-container {
+  width: 100%;
+  max-width: 820px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Scripture Tabs */
+.scripture-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.tab-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: var(--border-glass);
+  color: var(--text-muted);
+  padding: 10px 24px;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.tab-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--saffron), #e65100);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(255, 108, 0, 0.3);
+}
+
+/* Scripture Card */
+.scripture-card-wrapper {
+  perspective: 1200px;
+  width: 100%;
+  height: 320px;
+}
+
+.scripture-card {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.scripture-card.flip-page {
+  transform: rotateY(-180deg);
+}
+
+.scripture-card-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 16px;
+  background: rgba(15, 15, 25, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: var(--border-gold);
+  box-shadow: var(--shadow-premium);
+  overflow: hidden;
+}
+
+.scripture-card-front {
+  padding: 40px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+/* Shlok styling */
+.sanskrit-text {
+  font-family: var(--font-hindi);
+  font-size: 24px;
+  color: var(--gold-light);
+  line-height: 1.8;
+  font-weight: 600;
+  text-shadow: 0 0 10px var(--gold-glow);
+  padding: 15px 30px;
+  border-left: 2px solid var(--saffron);
+  border-right: 2px solid var(--saffron);
+  background: linear-gradient(90deg, rgba(255,108,0,0.02) 0%, transparent 50%, rgba(255,108,0,0.02) 100%);
+  width: 100%;
+  max-width: 680px;
+  transition: opacity 0.3s ease;
+}
+
+.verse-translations {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  width: 100%;
+  text-align: left;
+  margin-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 20px;
+  transition: opacity 0.3s ease;
+}
+
+.translation-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lang-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--saffron);
+  font-weight: 600;
+}
+
+.translation-text {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+
+#shlok-hindi {
+  font-family: var(--font-hindi);
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+.scripture-reference {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-top: 10px;
+  transition: opacity 0.3s ease;
+}
+
+/* Fade class for javascript page update */
+.scripture-fade {
+  opacity: 0;
+}
+
+/* ==========================================
+   ANIMATIONS & TRANSITIONS (GSAP targets)
+   ========================================== */
+.animate-text {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: transform 1s ease, opacity 1s ease;
+}
+
+.animate-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: transform 1s ease, opacity 1s ease;
+}
+
+.animate-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: transform 1s ease, opacity 1s ease;
+}
+
+.active-scroll-view .animate-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.active-scroll-view .animate-left {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.active-scroll-view .animate-right {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+
+/* ==========================================
+   RESPONSIVENESS (MOBILE / TABLET)
+   ========================================== */
+@media (max-width: 1024px) {
+  .main-header {
+    padding: 20px 30px;
+  }
+  .desktop-nav {
+    display: none; /* Hide header links on smaller screens */
+  }
+  .floating-nav-dots {
+    right: 20px;
+  }
+  
+  /* Section 2: 3D Temple */
+  .content-wrapper {
+    grid-template-columns: 1fr;
+    padding: 80px 8% 40px;
+    gap: 40px;
+  }
+  .text-side {
+    max-width: 100%;
+    text-align: center;
+  }
+  .section-badge::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .interactive-instruction {
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .card-side {
+    width: 100%;
+  }
+  .parallax-card-container {
+    width: 340px;
+    height: 400px;
+  }
+  
+  /* Section 3: Hotspots */
+  .showcase-container {
+    grid-template-columns: 1fr;
+    padding: 80px 6% 40px;
+  }
+  .details-sidebar {
+    max-width: 100%;
+    padding-right: 0;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .info-drawer {
+    margin-top: 15px;
+    min-height: 140px;
+  }
+  .interactive-image-pane {
+    padding: 20px 0;
+  }
+  
+  /* Section 5: Scripture */
+  .verse-translations {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .scripture-card-wrapper {
+    height: auto;
+    min-height: 420px;
+  }
+}
+
+@media (max-width: 580px) {
+  .section-title {
+    font-size: 30px;
+  }
+  .spirit-title {
+    font-size: 50px;
+  }
+  .sanskrit-text {
+    font-size: 18px;
+    padding: 10px 15px;
+  }
+  .parallax-card-container {
+    width: 280px;
+    height: 340px;
+  }
+  .card-info h3 {
+    font-size: 18px;
+  }
+  .info-drawer {
+    padding: 16px;
+  }
+  .hotspot-marker {
+    width: 18px;
+    height: 18px;
+  }
+  .hotspot-dot {
+    top: 4px;
+    left: 4px;
+    width: 10px;
+    height: 10px;
+  }
+  .hotspot-label {
+    display: none; /* Hide label on mobile to avoid clutter */
+  }
+}
