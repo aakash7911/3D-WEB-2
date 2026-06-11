@@ -5,7 +5,28 @@
 // Global image frame config
 const totalFrames = 300;
 const preloadedImages = [];
-let imagesLoaded = 0;
+const framesToStart = 50; // Start playing once 50 frames are loaded
+let essentialLoaded = 0;
+let totalLoaded = 0;
+let preloaderFinished = false;
+let animationRequestId = null;
+let currentFrameIndex = 0;
+let lastTime = 0;
+const fps = 24; // Smooth elegant speed
+const frameInterval = 1000 / fps;
+let isAnimationPlaying = false;
+
+// Prepopulate the preloadedImages array with image placeholders
+for (let i = 1; i <= totalFrames; i++) {
+  const img = new Image();
+  const numStr = String(i).padStart(3, '0');
+  preloadedImages.push({
+    img: img,
+    src: `frames/ezgif-frame-${numStr}.jpg`,
+    loaded: false,
+    started: false
+  });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   
@@ -36,46 +57,112 @@ document.addEventListener("DOMContentLoaded", () => {
 function initPreloader() {
   const preloader = document.getElementById("preloader");
   const progressBar = document.getElementById("preloader-progress");
-  
-  // Dynamically preload 300 frames in background
-  for (let i = 1; i <= totalFrames; i++) {
-    const img = new Image();
-    const numStr = String(i).padStart(3, '0');
-    img.src = `frames/ezgif-frame-${numStr}.jpg`;
-    img.onload = onImageLoad;
-    img.onerror = onImageLoad; // count errors to avoid getting stuck
-    preloadedImages.push(img);
+  const preloaderText = document.querySelector(".preloader-text");
+
+  // Start loading the first batch of essential frames immediately
+  for (let i = 0; i < framesToStart; i++) {
+    startLoadingFrame(i);
   }
 
-  function onImageLoad() {
-    imagesLoaded++;
-    const progressPercent = Math.min(100, Math.floor((imagesLoaded / totalFrames) * 100));
+  function startLoadingFrame(index) {
+    const item = preloadedImages[index];
+    if (item.started) return;
+    item.started = true;
     
-    if (progressBar) {
-      progressBar.style.width = `${progressPercent}%`;
+    item.img.onload = () => {
+      item.loaded = true;
+      totalLoaded++;
+      onFrameLoaded(index);
+    };
+    item.img.onerror = () => {
+      // mark as loaded to prevent blocking
+      item.loaded = true;
+      totalLoaded++;
+      onFrameLoaded(index);
+    };
+    item.img.src = item.src;
+  }
+
+  function onFrameLoaded(index) {
+    if (index < framesToStart) {
+      essentialLoaded = preloadedImages.slice(0, framesToStart).filter(f => f.loaded).length;
+      const progressPercent = Math.min(100, Math.floor((essentialLoaded / framesToStart) * 100));
+      
+      if (progressBar) {
+        progressBar.style.width = `${progressPercent}%`;
+      }
+      if (preloaderText) {
+        preloaderText.innerText = `Preparing Divine Journey... ${progressPercent}%`;
+      }
     }
-    
-    if (imagesLoaded >= totalFrames) {
+
+    const allEssentialLoaded = preloadedImages.slice(0, framesToStart).every(f => f.loaded);
+    if (allEssentialLoaded && !preloaderFinished) {
       revealPage();
     }
   }
 
-  // Safety Timeout: Force reveal after 10 seconds if user has slow internet
+  // Safety Timeout: reveal after 8 seconds
   const forceRevealTimeout = setTimeout(() => {
     revealPage();
-  }, 10000);
+  }, 8000);
 
-  let pageRevealed = false;
   function revealPage() {
-    if (pageRevealed) return;
-    pageRevealed = true;
+    if (preloaderFinished) return;
+    preloaderFinished = true;
     clearTimeout(forceRevealTimeout);
     
     if (preloader) {
       preloader.classList.add("fade-out");
     }
     triggerIntroAnimations();
+    
+    // Resume animation loop
+    resumeFrameAnimation();
+
+    // Load remaining frames in batches of 6
+    loadRemainingFrames();
   }
+}
+
+function loadRemainingFrames() {
+  let currentIndex = framesToStart;
+  const batchSize = 6;
+  
+  function loadNextBatch() {
+    if (currentIndex >= totalFrames) return;
+    
+    let loadedInBatch = 0;
+    const end = Math.min(totalFrames, currentIndex + batchSize);
+    
+    for (let i = currentIndex; i < end; i++) {
+      const item = preloadedImages[i];
+      if (item.started) continue;
+      item.started = true;
+      
+      item.img.onload = () => {
+        item.loaded = true;
+        totalLoaded++;
+        loadedInBatch++;
+        if (loadedInBatch === (end - currentIndex)) {
+          currentIndex = end;
+          setTimeout(loadNextBatch, 50);
+        }
+      };
+      item.img.onerror = () => {
+        item.loaded = true;
+        totalLoaded++;
+        loadedInBatch++;
+        if (loadedInBatch === (end - currentIndex)) {
+          currentIndex = end;
+          setTimeout(loadNextBatch, 50);
+        }
+      };
+      item.img.src = item.src;
+    }
+  }
+  
+  loadNextBatch();
 }
 
 function triggerIntroAnimations() {
@@ -196,6 +283,13 @@ function initSectionObserver() {
 
         // Trigger animations for current section elements
         animateSectionContent(activeSectionId);
+
+        // Pause/resume canvas animation to save CPU resources
+        if (activeSectionId === "intro") {
+          resumeFrameAnimation();
+        } else {
+          pauseFrameAnimation();
+        }
       }
     });
   }, observerOptions);
@@ -301,52 +395,79 @@ function animateSectionContent(sectionId) {
    2. FRAME SEQUENCE PLAYER (SECTION 1)
    ========================================== */
 function initFrameSequencer() {
+  // Canvas is loaded and drawn dynamically.
+  // Playback starts automatically once preloader reveals the page.
+  
+  const canvas = document.getElementById("intro-canvas");
+  if (!canvas) return;
+  
+  function resizeCanvas() {
+    canvas.width = 1280;
+    canvas.height = 720;
+    drawFrame(currentFrameIndex);
+  }
+  
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+}
+
+function drawFrame(index) {
   const canvas = document.getElementById("intro-canvas");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
   
-  let currentFrameIndex = 0;
-
-  function resizeCanvas() {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-    drawFrame(currentFrameIndex);
-  }
-
-  function drawFrame(index) {
-    const img = preloadedImages[index];
-    if (img && img.complete && img.naturalWidth !== 0) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      const imgRatio = img.width / img.height;
-      const canvasRatio = canvas.width / canvas.height;
-      let sx, sy, sWidth, sHeight;
-
-      if (imgRatio > canvasRatio) {
-        sHeight = img.height;
-        sWidth = img.height * canvasRatio;
-        sy = 0;
-        sx = (img.width - sWidth) / 2;
-      } else {
-        sWidth = img.width;
-        sHeight = img.width / canvasRatio;
-        sx = 0;
-        sy = (img.height - sHeight) / 2;
+  let frameToDraw = preloadedImages[index];
+  
+  // Recovery fallback: search backwards if target frame is not loaded yet
+  if (!frameToDraw || !frameToDraw.loaded) {
+    for (let i = 1; i < totalFrames; i++) {
+      const idx = (index - i + totalFrames) % totalFrames;
+      if (preloadedImages[idx] && preloadedImages[idx].loaded) {
+        frameToDraw = preloadedImages[idx];
+        break;
       }
-
-      ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
-      currentFrameIndex = index;
     }
   }
+  
+  if (frameToDraw && frameToDraw.loaded && frameToDraw.img.complete && frameToDraw.img.naturalWidth > 0) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(frameToDraw.img, 0, 0, canvas.width, canvas.height);
+  }
+}
 
-  window.addEventListener("resize", resizeCanvas);
-  resizeCanvas();
+function resumeFrameAnimation() {
+  if (isAnimationPlaying) return;
+  isAnimationPlaying = true;
+  lastTime = 0; // reset for smooth timing
+  startFrameAnimationLoop();
+}
 
-  // Smooth continuous auto-play loop playing at ~30 FPS (33ms per frame)
-  setInterval(() => {
-    let nextFrame = (currentFrameIndex + 1) % totalFrames;
-    drawFrame(nextFrame);
-  }, 33); // Butter-smooth 30fps play rate!
+function pauseFrameAnimation() {
+  if (!isAnimationPlaying) return;
+  isAnimationPlaying = false;
+  if (animationRequestId) {
+    cancelAnimationFrame(animationRequestId);
+    animationRequestId = null;
+  }
+}
+
+function startFrameAnimationLoop() {
+  function render(timestamp) {
+    if (!isAnimationPlaying) return;
+    
+    if (!lastTime) lastTime = timestamp;
+    const elapsed = timestamp - lastTime;
+    
+    if (elapsed >= frameInterval) {
+      drawFrame(currentFrameIndex);
+      currentFrameIndex = (currentFrameIndex + 1) % totalFrames;
+      lastTime = timestamp - (elapsed % frameInterval);
+    }
+    
+    animationRequestId = requestAnimationFrame(render);
+  }
+  
+  animationRequestId = requestAnimationFrame(render);
 }
 
 /* ==========================================
